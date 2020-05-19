@@ -1,0 +1,40 @@
+version: "3.3"
+
+services:
+  netcoreapi:
+    image: docker.corp.jabil.org/1421574/netcore-docker:v4
+    build:
+      context: ./DockerAngular
+      dockerfile: Dockerfile
+    restart: always
+    expose:
+      - "80"
+    ports:
+      - "8083:80"
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '1'
+          memory: 1G
+
+  angular:
+    image: docker.corp.jabil.org/1421574/angular-docker:v2
+    build:
+      context: ./DockerNetCoreAPI/DockerAPI
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8084:80"
+    depends_on:
+      - netcoreapi
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '1'
+          memory: 1G

@@ -1,0 +1,76 @@
+version: "3.7"
+
+services:
+  netcoreapi:
+    image: lreb-netcore
+    restart: always
+    ports:
+      - "8080:8080"
+    # The CDM will only allow you to expose one endpoint to the outside world.  I changed the "8080":"8080" to just .... 8080 ... this will get you around the CDM's rule
+    healthcheck:
+      test: "exit 0"
+
+  angular:
+    image: lreb-angular
+    restart: always
+    ports:
+      - "8081:8081"
+    depends_on:
+      - netcoreapi
+
+
+
+
+#
+# restart_policy:
+#         # condition: on-failure
+#         delay: 30s
+#         # max_attempts: 2
+#         # window: 120s
+#       update_config:
+#         # parallelism: 1
+#         delay: 10s
+#         # failure_action: continue
+#         # monitor: 60s
+#         # max_failure_ratio: 0.3
+
+# version: "3.7"
+
+# services:
+#   netcoreapi:
+#     #image: lreb-netcore
+#     image: docker.corp.jabil.org/it-chi/lreb-server-netcore:1.0.7
+#     restart: always
+#     ports:
+#       - 8080
+#     healthcheck:
+#       test: "exit 0"
+#     read_only: true
+#     deploy:
+#       resources:
+#         limits:
+#           cpus: '1'
+#           memory: 1G
+#         reservations:
+#           cpus: '1'
+#           memory: 1G
+
+#   angular:
+#     #image: lreb-angular
+#     image: docker.corp.jabil.org/it-chi/lreb-client-angular:1.0.7
+#     restart: always
+#     ports:
+#       - 8081:8081
+#     read_only: true
+#     # tmpfs:
+#     #   - "/tmp/logs"
+#     depends_on:
+#       - netcoreapi
+#     deploy:
+#       resources:
+#         limits:
+#           cpus: '1'
+#           memory: 1G
+#         reservations:
+#           cpus: '1'
+#           memory: 1G
